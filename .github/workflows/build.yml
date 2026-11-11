@@ -1,0 +1,38 @@
+
+name: Build ItemFrameDupe
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'ItemFrameDupe-source.zip'
+      - '.github/workflows/build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Extract source
+        run: unzip ItemFrameDupe-source.zip
+
+      - name: Build plugin
+        working-directory: ItemFrameDupe
+        run: mvn clean package
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: ItemFrameDupe
+          path: ItemFrameDupe/target/*.jar
+          
