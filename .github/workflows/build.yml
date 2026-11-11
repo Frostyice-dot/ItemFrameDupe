@@ -1,4 +1,3 @@
-
 name: Build ItemFrameDupe
 
 on:
@@ -13,22 +12,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Extract source
+        run: unzip ItemFrameDupe-source.zip
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven
 
-      - name: Extract source
-        run: unzip ItemFrameDupe-source.zip
-
-      - name: Build plugin
-        working-directory: ItemFrameDupe
-        run: mvn clean package
+      - name: Compile
+        run: mvn -f ItemFrameDupe/pom.xml clean package
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
